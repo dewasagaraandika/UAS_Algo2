@@ -1,0 +1,126 @@
+program Nilai_huruf_mutu;
+uses crt;
+const
+   jml_data=10;
+type
+   x = record
+        mk    :string;
+        nama  :string;
+        nim   :string;
+        prodi :string;
+        absen :real;
+        tugas :real;
+        quiz  :real;
+        uts   :real;
+        uas   :real;
+        nilai :real;
+        hm    :char;
+       end;
+xxx = array [1..jml_data] of x;
+
+function menu:char;
+begin
+    writeln('NILAI MATAKULIAH ');
+    writeln(' _______________ ');
+    writeln('| 1.Input Data  |');
+    writeln('| 2.Output Data |');
+    writeln('|_______________|');
+    writeln('| 0.Keluar      |');
+    writeln('|_______________|');
+    write('Pilih menu : ');readln(menu);
+end;
+
+procedure input(idx:integer; var data:xxx);
+begin
+    writeln('Data ke-',idx);
+    write('Mata Kuliah : ');readln(data[idx].mk );
+    writeln('______________________________');
+    write('Nama  : ');readln(data[idx].nama );
+    write('Nim   : ');readln(data[idx].nim  );
+    write('Prodi : ');readln(data[idx].prodi);
+    writeln;
+    write('Absen : ');readln(data[idx].absen);
+    write('Tugas : ');readln(data[idx].tugas);
+    write('Quiz  : ');readln(data[idx].quiz );
+    write('UTS   : ');readln(data[idx].uts  );
+    write('UAS   : ');readln(data[idx].uas  );
+
+    data[idx].nilai:=(data[idx].absen+data[idx].tugas+data[idx].quiz+data[idx].uts+data[idx].uas)/5;
+end;
+
+procedure proses(var data:x);
+begin
+    if (data.nilai>85) and (data.nilai<=100) then
+        data.hm:='A'
+    else if (data.nilai>70) and (data.nilai<=85) then
+        data.hm:='B'
+    else if (data.nilai>55) and (data.nilai<=70) then
+        data.hm:='C'
+    else if (data.nilai>40) and (data.nilai<=55) then
+        data.hm:='D'
+    else
+        data.hm:='E';
+end;
+
+procedure output(jml:integer; data:xxx);
+var
+i:integer;
+begin
+  if jml=0 then
+    begin
+      writeln('belum ada data masuk!');
+      readkey;
+    end
+  else
+  for i:=1 to jml do
+    begin
+      writeln('_____________________________');
+      writeln('Data ke-',i);
+      writeln('Mata Kuliah : ',data[i].mk    );
+      writeln;
+      writeln('Nama        : ',data[i].nama  );
+      writeln('Nim         : ',data[i].nim   );
+      writeln('Prodi       : ',data[i].prodi );
+      writeln;
+      writeln('Nilai       : ',data[i].nilai:0:2);
+      writeln('Huruf Mutu  : ',data[i].hm    );
+      writeln('_____________________________');
+      writeln;
+      writeln;
+    end;
+end;
+
+
+var
+no_menu,terus:char;
+jml_mhs      :integer;
+data         :xxx;
+
+begin
+jml_mhs:=0;
+repeat
+clrscr;
+no_menu:=menu;
+
+ case no_menu of
+  '1' : begin
+        clrscr;
+        repeat
+          input(jml_mhs+1,data);
+          proses(data[jml_mhs+1]);
+          jml_mhs:=jml_mhs+1;
+          writeln;
+          write('Masukan data lagi y/n : ');readln(terus);
+          writeln;
+          writeln;
+        until(terus='n')
+        end;
+
+  '2' : begin
+        clrscr;
+        output(jml_mhs, data);readln;
+        end;
+ end;
+
+until(no_menu='0');
+end.
